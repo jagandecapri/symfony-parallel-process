@@ -50,7 +50,7 @@ class ProcessManager {
   {
     $started = 0;
     for ($i=0; $i < $max_parallel; $i++) {
-      $processes[$i]->start;
+      $processes[$i]->start();
       $started++;
     }
     return $started++;
