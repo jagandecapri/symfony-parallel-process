@@ -1,7 +1,7 @@
 {
     "name": "jack/symfony-parallel-process",
     "type": "library",
-    "description": "Simple wrapper for parallel processing using Symfony process component",
+    "description": "Simple wrapper to enable parallel processing using Symfony Process component",
     "keywords": ["process","parallel", "parallel processing", "symfony"],
     "homepage": "https://github.com/jagandecapri/symfony-parallel-process",
     "license": "MIT",
