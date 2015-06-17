@@ -2,7 +2,11 @@
 
 A simple wrapper to enable parallel processing using [Symfony Process](http://symfony.com/doc/current/components/process.html) component.
 
-Example
+##Installation
+
+`composer require jagandecapri/symfony-parallel-process`
+
+##Example
 
 ```php
 <?php
