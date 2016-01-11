@@ -14,6 +14,12 @@
         {
             "name": "Jack",
             "role": "Developer"
+        },
+        {
+            "name": "Oliver Eglseder",
+            "email": "php@vxvr.de",
+            "homepage": "http://vxvr.de",
+            "role": "Contributor"
         }
     ],
     "require": {
