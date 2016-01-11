@@ -58,6 +58,11 @@ class ProcessManager
         return $maxParallel;
     }
 
+    /**
+     * @param Process[] $processes
+     * @param int $maxParallel
+     * @return int
+     */
     public function startChildren(array $processes, $maxParallel)
     {
         $started = 0;
