@@ -57,7 +57,7 @@ class ProcessManager
     /**
      * @param Process[] $processes
      */
-    protected function validateProcesses($processes)
+    protected function validateProcesses(array $processes)
     {
         if (empty($processes)) {
             throw new \InvalidArgumentException('Can not run in parallel 0 commands');
