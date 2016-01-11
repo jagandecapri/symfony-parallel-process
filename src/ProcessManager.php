@@ -62,16 +62,12 @@ class ProcessManager
     /**
      * @param Process[] $processes
      * @param int $maxParallel
-     * @return int
      */
     protected function startChildren(array $processes, $maxParallel)
     {
-        $started = 0;
         for ($i = 0; $i < $maxParallel; $i++) {
             $processes[$i]->start();
-            $started++;
         }
-        return $started;
     }
 
     /**
