@@ -24,12 +24,12 @@ class ProcessManager
 
         $this->processes = $processes;
 
-        $maxParallel = $this->fixMaxParallel($processes, $maxParallel);
-
         $queue = array_chunk($processes, $maxParallel);
 
         foreach ($queue as $processBatch) {
-            $this->startChildren($processBatch, $maxParallel);
+            $batchLimit = $this->fixMaxParallel($processBatch, $maxParallel);
+
+            $this->startChildren($processBatch, $batchLimit);
             do {
                 usleep($poll);
             } while ($this->waitFor($processBatch));
