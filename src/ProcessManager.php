@@ -31,7 +31,7 @@ class ProcessManager
     /**
      * @param Process[] $processes
      */
-    public function validateProcesses($processes)
+    protected function validateProcesses($processes)
     {
         if (empty($processes)) {
             throw new \InvalidArgumentException('Can not run in parallel 0 commands');
@@ -49,7 +49,7 @@ class ProcessManager
      * @param int $maxParallel
      * @return int
      */
-    public function fixMaxParallel($processes, $maxParallel)
+    protected function fixMaxParallel($processes, $maxParallel)
     {
         $processesCount = count($processes);
         if ($maxParallel <= 0 || $maxParallel > $processesCount) {
@@ -63,7 +63,7 @@ class ProcessManager
      * @param int $maxParallel
      * @return int
      */
-    public function startChildren(array $processes, $maxParallel)
+    protected function startChildren(array $processes, $maxParallel)
     {
         $started = 0;
         for ($i = 0; $i < $maxParallel; $i++) {
@@ -77,7 +77,7 @@ class ProcessManager
      * @param Process[] $processes
      * @return int
      */
-    public function waitFor(array $processes)
+    protected function waitFor(array $processes)
     {
         $numRunningTask = 0;
         foreach ($processes as $process) {
