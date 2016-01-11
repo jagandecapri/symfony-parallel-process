@@ -15,7 +15,7 @@ class ProcessManager
         $this->processes = $processes;
 
         if (!count($processes)) {
-            throw new \Exception("Can not run in parallel 0 commands");
+            throw new \Exception('Can not run in parallel 0 commands');
         }
 
         $this->validateProcesses($processes);
@@ -35,7 +35,7 @@ class ProcessManager
     {
         foreach ($processes as $process) {
             if (!($process instanceof Process)) {
-                throw new \Exception("Process in array need to be instance of Symfony Process");
+                throw new \Exception('Process in array need to be instance of Symfony Process');
             }
         }
     }
