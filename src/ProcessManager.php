@@ -53,7 +53,7 @@ class ProcessManager
             $processes[$i]->start();
             $started++;
         }
-        return $started++;
+        return $started;
     }
 
     public function waitFor(array $processes)
