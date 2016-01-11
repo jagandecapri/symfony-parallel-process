@@ -1,6 +1,7 @@
 <?php
 namespace Jack\Symfony;
 
+use Symfony\Component\Process\PhpProcess;
 use Symfony\Component\Process\Process;
 
 class ProcessManagerTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +12,7 @@ class ProcessManagerTest extends \PHPUnit_Framework_TestCase
     protected $processManager;
 
     /**
-     * 
+     *
      */
     public function setUp()
     {
@@ -42,10 +43,12 @@ class ProcessManagerTest extends \PHPUnit_Framework_TestCase
         $processes = array(
             new Process('echo foo'),
             new Process('echo bar'),
+            new PhpProcess('<?php echo \'Hello World\'; ?>'),
         );
         $this->processManager->runParallel($processes, 2, 1000);
 
         $this->assertEquals('foo' . PHP_EOL, $processes[0]->getOutput());
         $this->assertEquals('bar' . PHP_EOL, $processes[1]->getOutput());
+        $this->assertEquals('Hello World', $processes[2]->getOutput());
     }
 }
