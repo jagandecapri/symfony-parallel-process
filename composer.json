@@ -2,7 +2,12 @@
     "name": "jagandecapri/symfony-parallel-process",
     "type": "library",
     "description": "Simple wrapper to enable parallel processing using Symfony Process component",
-    "keywords": ["process","parallel", "parallel processing", "symfony"],
+    "keywords": [
+        "process",
+        "parallel",
+        "parallel processing",
+        "symfony"
+    ],
     "homepage": "https://github.com/jagandecapri/symfony-parallel-process",
     "license": "MIT",
     "authors": [
@@ -17,9 +22,9 @@
     "require-dev": {
         "phpunit/phpunit": "~4.6"
     },
-    "autoload":{
-      "psr-4": {
-        "Jack\\Symfony\\" : "src/"
-      }
+    "autoload": {
+        "psr-4": {
+            "Jack\\Symfony\\": "src/"
+        }
     }
 }
