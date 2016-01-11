@@ -87,16 +87,4 @@ class ProcessManager
         }
         return $numRunningTask;
     }
-
-    public function isProcessesRunning()
-    {
-        $running = false;
-        foreach ($this->processes as $process) {
-            if ($process->isRunning()) {
-                $running = true;
-                break;
-            }
-        }
-        return $running;
-    }
 }
