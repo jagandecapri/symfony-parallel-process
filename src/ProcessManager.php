@@ -9,11 +9,6 @@ use Symfony\Component\Process\Process;
 class ProcessManager
 {
     /**
-     * @var Process[]
-     */
-    protected $processes;
-
-    /**
      * @param Process[] $processes
      * @param int $maxParallel
      * @param int $poll
@@ -21,8 +16,6 @@ class ProcessManager
     public function runParallel(array $processes, $maxParallel, $poll = 1000)
     {
         $this->validateProcesses($processes);
-
-        $this->processes = $processes;
 
         $queue = array_chunk($processes, $maxParallel);
 
