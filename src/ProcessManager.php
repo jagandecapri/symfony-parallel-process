@@ -31,7 +31,7 @@ class ProcessManager
     public function validateProcesses($processes)
     {
         if (empty($processes)) {
-            throw new \Exception('Can not run in parallel 0 commands');
+            throw new \InvalidArgumentException('Can not run in parallel 0 commands');
         }
 
         foreach ($processes as $process) {
