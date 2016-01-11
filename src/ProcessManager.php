@@ -28,6 +28,9 @@ class ProcessManager
         }
     }
 
+    /**
+     * @param Process[] $processes
+     */
     public function validateProcesses($processes)
     {
         if (empty($processes)) {
