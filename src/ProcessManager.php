@@ -3,6 +3,9 @@ namespace Jack\Symfony;
 
 use Symfony\Component\Process\Process;
 
+/**
+ * This ProcessManager is a simple wrapper to enable parallel processing using Symfony Process component.
+ */
 class ProcessManager
 {
     /**
