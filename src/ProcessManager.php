@@ -73,7 +73,7 @@ class ProcessManager
         foreach ($this->processes as $process) {
             if ($process->isRunning()) {
                 $running = true;
-                $break;
+                break;
             }
         }
         return $running;
