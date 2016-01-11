@@ -73,6 +73,10 @@ class ProcessManager
         return $started;
     }
 
+    /**
+     * @param Process[] $processes
+     * @return int
+     */
     public function waitFor(array $processes)
     {
         $numRunningTask = 0;
