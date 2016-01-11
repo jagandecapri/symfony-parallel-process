@@ -17,10 +17,13 @@ class ProcessManager
     {
         $this->validateProcesses($processes);
 
+        /** @var Process[][] $queue */
         $queue = array_chunk($processes, $maxParallel);
 
         foreach ($queue as $processBatch) {
-            $this->startChildren($processBatch);
+            foreach ($processBatch as $process) {
+                $process->start();
+            }
             do {
                 usleep($poll);
             } while ($this->getNumberOfRunningTasks($processBatch));
@@ -40,16 +43,6 @@ class ProcessManager
             if (!($process instanceof Process)) {
                 throw new \InvalidArgumentException('Process in array need to be instance of Symfony Process');
             }
-        }
-    }
-
-    /**
-     * @param Process[] $processes
-     */
-    protected function startChildren(array $processes)
-    {
-        foreach ($processes as $process) {
-            $process->start();
         }
     }
 
