@@ -7,7 +7,7 @@ class ProcessManager
 {
     public $processes;
 
-    public function runParallel(array $processes, $max_parallel, $poll = 1000)
+    public function runParallel(array $processes, $maxParallel, $poll = 1000)
     {
         $this->processes = $processes;
 
@@ -16,15 +16,15 @@ class ProcessManager
         }
 
         $this->validateProcesses($processes);
-        $max_parallel = $this->fixMaxParallel($processes, $max_parallel);
+        $maxParallel = $this->fixMaxParallel($processes, $maxParallel);
 
-        $queue = array_chunk($processes, $max_parallel);
+        $queue = array_chunk($processes, $maxParallel);
 
-        foreach ($queue as $process_batch) {
-            $this->startChildren($process_batch, $max_parallel);
+        foreach ($queue as $processBatch) {
+            $this->startChildren($processBatch, $maxParallel);
             do {
                 usleep($poll);
-            } while ($this->waitFor($process_batch));
+            } while ($this->waitFor($processBatch));
         }
     }
 
@@ -37,19 +37,19 @@ class ProcessManager
         }
     }
 
-    public function fixMaxParallel($processes, $max_parallel)
+    public function fixMaxParallel($processes, $maxParallel)
     {
-        $num_processes = count($processes);
-        if ($max_parallel <= 0 || $max_parallel > $num_processes) {
-            $max_parallel = $num_processes;
+        $numProcesses = count($processes);
+        if ($maxParallel <= 0 || $maxParallel > $numProcesses) {
+            $maxParallel = $numProcesses;
         }
-        return $max_parallel;
+        return $maxParallel;
     }
 
-    public function startChildren(array $processes, $max_parallel)
+    public function startChildren(array $processes, $maxParallel)
     {
         $started = 0;
-        for ($i = 0; $i < $max_parallel; $i++) {
+        for ($i = 0; $i < $maxParallel; $i++) {
             $processes[$i]->start();
             $started++;
         }
@@ -58,13 +58,13 @@ class ProcessManager
 
     public function waitFor(array $processes)
     {
-        $num_running_task = 0;
+        $numRunningTask = 0;
         foreach ($processes as $process) {
             if ($process->isRunning()) {
-                $num_running_task++;
+                $numRunningTask++;
             }
         }
-        return $num_running_task;
+        return $numRunningTask;
     }
 
     public function isProcessesRunning()
