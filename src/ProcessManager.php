@@ -16,9 +16,6 @@ class ProcessManager
 
         $this->processes = $processes;
 
-        if (empty($processes)) {
-            throw new \Exception('Can not run in parallel 0 commands');
-        }
         $maxParallel = $this->fixMaxParallel($processes, $maxParallel);
 
         $queue = array_chunk($processes, $maxParallel);
@@ -33,6 +30,10 @@ class ProcessManager
 
     public function validateProcesses($processes)
     {
+        if (empty($processes)) {
+            throw new \Exception('Can not run in parallel 0 commands');
+        }
+
         foreach ($processes as $process) {
             if (!($process instanceof Process)) {
                 throw new \InvalidArgumentException('Process in array need to be instance of Symfony Process');
