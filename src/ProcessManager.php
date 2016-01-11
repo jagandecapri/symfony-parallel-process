@@ -39,7 +39,6 @@ class ProcessManager
             // remove all finished processes from the stack
             foreach ($currentProcesses as $index => $process) {
                 if (!$process->isRunning()) {
-                    echo $process->getOutput();
                     unset($currentProcesses[$index]);
 
                     // directly add and start new process after the previous finished
