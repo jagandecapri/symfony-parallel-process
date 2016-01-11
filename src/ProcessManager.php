@@ -5,7 +5,7 @@ use Symfony\Component\Process\Process;
 
 class ProcessManager
 {
-    public $processes;
+    protected $processes;
 
     public function runParallel(array $processes, $maxParallel, $poll = 1000)
     {
