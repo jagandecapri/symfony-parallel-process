@@ -10,6 +10,11 @@ class ProcessManager
      */
     protected $processes;
 
+    /**
+     * @param Process[] $processes
+     * @param int $maxParallel
+     * @param int $poll
+     */
     public function runParallel(array $processes, $maxParallel, $poll = 1000)
     {
         $this->validateProcesses($processes);
