@@ -35,7 +35,7 @@ class ProcessManager
     {
         foreach ($processes as $process) {
             if (!($process instanceof Process)) {
-                throw new \Exception('Process in array need to be instance of Symfony Process');
+                throw new \InvalidArgumentException('Process in array need to be instance of Symfony Process');
             }
         }
     }
