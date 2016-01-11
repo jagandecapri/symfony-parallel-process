@@ -44,6 +44,11 @@ class ProcessManager
         }
     }
 
+    /**
+     * @param Process[] $processes
+     * @param int $maxParallel
+     * @return int
+     */
     public function fixMaxParallel($processes, $maxParallel)
     {
         $processesCount = count($processes);
