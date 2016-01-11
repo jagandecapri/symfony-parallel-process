@@ -20,9 +20,7 @@ class ProcessManager
         $queue = array_chunk($processes, $maxParallel);
 
         foreach ($queue as $processBatch) {
-            $batchLimit = $this->fixMaxParallel($processBatch, $maxParallel);
-
-            $this->startChildren($processBatch, $batchLimit);
+            $this->startChildren($processBatch);
             do {
                 usleep($poll);
             } while ($this->getNumberOfRunningTasks($processBatch));
@@ -47,26 +45,11 @@ class ProcessManager
 
     /**
      * @param Process[] $processes
-     * @param int $maxParallel
-     * @return int
      */
-    protected function fixMaxParallel($processes, $maxParallel)
+    protected function startChildren(array $processes)
     {
-        $processesCount = count($processes);
-        if ($maxParallel <= 0 || $maxParallel > $processesCount) {
-            $maxParallel = $processesCount;
-        }
-        return $maxParallel;
-    }
-
-    /**
-     * @param Process[] $processes
-     * @param int $maxParallel
-     */
-    protected function startChildren(array $processes, $maxParallel)
-    {
-        for ($i = 0; $i < $maxParallel; $i++) {
-            $processes[$i]->start();
+        foreach ($processes as $process) {
+            $process->start();
         }
     }
 
