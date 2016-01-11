@@ -46,9 +46,9 @@ class ProcessManager
 
     public function fixMaxParallel($processes, $maxParallel)
     {
-        $numProcesses = count($processes);
-        if ($maxParallel <= 0 || $maxParallel > $numProcesses) {
-            $maxParallel = $numProcesses;
+        $processesCount = count($processes);
+        if ($maxParallel <= 0 || $maxParallel > $processesCount) {
+            $maxParallel = $processesCount;
         }
         return $maxParallel;
     }
