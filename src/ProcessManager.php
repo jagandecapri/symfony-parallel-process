@@ -32,7 +32,7 @@ class ProcessManager
             $this->startChildren($processBatch, $batchLimit);
             do {
                 usleep($poll);
-            } while ($this->waitFor($processBatch));
+            } while ($this->getNumberOfRunningTasks($processBatch));
         }
     }
 
@@ -82,13 +82,13 @@ class ProcessManager
     }
 
     /**
-     * @param Process[] $processes
+     * @param Process[] $processBatch
      * @return int
      */
-    protected function waitFor(array $processes)
+    protected function getNumberOfRunningTasks(array $processBatch)
     {
         $numRunningTask = 0;
-        foreach ($processes as $process) {
+        foreach ($processBatch as $process) {
             if ($process->isRunning()) {
                 $numRunningTask++;
             }
