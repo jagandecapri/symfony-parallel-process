@@ -79,5 +79,3 @@ class ProcessManager
         return $running;
     }
 }
-
-/* End of file ProcessManager.php */
