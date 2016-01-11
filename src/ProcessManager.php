@@ -17,17 +17,41 @@ class ProcessManager
     {
         $this->validateProcesses($processes);
 
-        /** @var Process[][] $queue */
-        $queue = array_chunk($processes, $maxParallel);
+        // do not modify the object pointers in the argument, copy to local working variable
+        $processesQueue = $processes;
 
-        foreach ($queue as $processBatch) {
-            foreach ($processBatch as $process) {
-                $process->start();
-            }
-            do {
-                usleep($poll);
-            } while ($this->getNumberOfRunningTasks($processBatch));
+        // fix maxParallel to be max the number of processes or positive
+        $maxParallel = min(abs($maxParallel), count($processesQueue));
+
+        // get the first stack of processes to start at the same time
+        /** @var Process[] $currentProcesses */
+        $currentProcesses = array_splice($processesQueue, 0, $maxParallel);
+
+        // start the initial stack of processes
+        foreach ($currentProcesses as $process) {
+            $process->start();
         }
+
+        do {
+            // wait for the given time
+            usleep($poll);
+
+            // remove all finished processes from the stack
+            foreach ($currentProcesses as $index => $process) {
+                if (!$process->isRunning()) {
+                    echo $process->getOutput();
+                    unset($currentProcesses[$index]);
+
+                    // directly add and start new process after the previous finished
+                    if (count($processesQueue) > 0) {
+                        $nextProcess = array_shift($processesQueue);
+                        $nextProcess->start();
+                        $currentProcesses[] = $nextProcess;
+                    }
+                }
+            }
+            // continue loop while there are processes being executed or waiting for execution
+        } while (count($processesQueue) > 0 || count($currentProcesses) > 0);
     }
 
     /**
@@ -44,20 +68,5 @@ class ProcessManager
                 throw new \InvalidArgumentException('Process in array need to be instance of Symfony Process');
             }
         }
-    }
-
-    /**
-     * @param Process[] $processBatch
-     * @return int
-     */
-    protected function getNumberOfRunningTasks(array $processBatch)
-    {
-        $numRunningTask = 0;
-        foreach ($processBatch as $process) {
-            if ($process->isRunning()) {
-                $numRunningTask++;
-            }
-        }
-        return $numRunningTask;
     }
 }
