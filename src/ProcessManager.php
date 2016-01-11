@@ -12,13 +12,13 @@ class ProcessManager
 
     public function runParallel(array $processes, $maxParallel, $poll = 1000)
     {
+        $this->validateProcesses($processes);
+
         $this->processes = $processes;
 
         if (empty($processes)) {
             throw new \Exception('Can not run in parallel 0 commands');
         }
-
-        $this->validateProcesses($processes);
         $maxParallel = $this->fixMaxParallel($processes, $maxParallel);
 
         $queue = array_chunk($processes, $maxParallel);
