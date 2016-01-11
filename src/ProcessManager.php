@@ -14,7 +14,7 @@ class ProcessManager
     {
         $this->processes = $processes;
 
-        if (!count($processes)) {
+        if (empty($processes)) {
             throw new \Exception('Can not run in parallel 0 commands');
         }
 
