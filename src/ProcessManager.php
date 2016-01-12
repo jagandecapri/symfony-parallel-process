@@ -3,81 +3,69 @@ namespace Jack\Symfony;
 
 use Symfony\Component\Process\Process;
 
-class ProcessManager {
+/**
+ * This ProcessManager is a simple wrapper to enable parallel processing using Symfony Process component.
+ */
+class ProcessManager
+{
+    /**
+     * @param Process[] $processes
+     * @param int $maxParallel
+     * @param int $poll
+     */
+    public function runParallel(array $processes, $maxParallel, $poll = 1000)
+    {
+        $this->validateProcesses($processes);
 
-  public $processes;
+        // do not modify the object pointers in the argument, copy to local working variable
+        $processesQueue = $processes;
 
-  public function runParallel(array $processes, $max_parallel, $poll = 1000)
-  {
-   $this->processes = $processes;
+        // fix maxParallel to be max the number of processes or positive
+        $maxParallel = min(abs($maxParallel), count($processesQueue));
 
-   if ( !count( $processes ) ) {
-      throw new \Exception( "Can not run in parallel 0 commands" );
-   }
+        // get the first stack of processes to start at the same time
+        /** @var Process[] $currentProcesses */
+        $currentProcesses = array_splice($processesQueue, 0, $maxParallel);
 
-   $this->validateProcesses($processes);
-   $max_parallel = $this->fixMaxParallel($processes, $max_parallel);
+        // start the initial stack of processes
+        foreach ($currentProcesses as $process) {
+            $process->start();
+        }
 
-   $queue = array_chunk($processes, $max_parallel);
+        do {
+            // wait for the given time
+            usleep($poll);
 
-   foreach ($queue as $process_batch) {
-     $this->startChildren($process_batch, $max_parallel);
-     do {
-       usleep($poll);
-     } while ($this->waitFor($process_batch));
-   }
-  }
+            // remove all finished processes from the stack
+            foreach ($currentProcesses as $index => $process) {
+                if (!$process->isRunning()) {
+                    unset($currentProcesses[$index]);
 
-  public function validateProcesses($processes)
-  {
-    foreach ($processes as $process) {
-      if (!($process instanceof Process)) {
-        throw new \Exception("Process in array need to be instance of Symfony Process");
-      }
+                    // directly add and start new process after the previous finished
+                    if (count($processesQueue) > 0) {
+                        $nextProcess = array_shift($processesQueue);
+                        $nextProcess->start();
+                        $currentProcesses[] = $nextProcess;
+                    }
+                }
+            }
+            // continue loop while there are processes being executed or waiting for execution
+        } while (count($processesQueue) > 0 || count($currentProcesses) > 0);
     }
-  }
 
-  public function fixMaxParallel($processes, $max_parallel)
-  {
-    $num_processes = count($processes);
-    if ($max_parallel <= 0 || $max_parallel > $num_processes) {
-      $max_parallel = $num_processes;
-    }
-    return $max_parallel;
-  }
+    /**
+     * @param Process[] $processes
+     */
+    protected function validateProcesses(array $processes)
+    {
+        if (empty($processes)) {
+            throw new \InvalidArgumentException('Can not run in parallel 0 commands');
+        }
 
-  public function startChildren(array $processes, $max_parallel)
-  {
-    $started = 0;
-    for ($i=0; $i < $max_parallel; $i++) {
-      $processes[$i]->start();
-      $started++;
+        foreach ($processes as $process) {
+            if (!($process instanceof Process)) {
+                throw new \InvalidArgumentException('Process in array need to be instance of Symfony Process');
+            }
+        }
     }
-    return $started++;
-  }
-
-  public function waitFor(array $processes)
-  {
-    $num_running_task = 0;
-    foreach ($processes as $process) {
-      if ($process->isRunning()) {
-        $num_running_task++;
-      }
-    }
-    return $num_running_task;
-  }
-
-  public function isProcessesRunning()
-  {
-    $running = false;
-    foreach ($this->processes as $process) {
-      if ($process->isRunning()) {
-        $running = true;
-        $break;
-      }
-    }
-    return $running;
-  }
 }
-
-/* End of file ProcessManager.php */
