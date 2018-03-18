@@ -14,7 +14,7 @@ class ProcessManager
      * @param int $poll microseconds
      * @param Callable $callback takes 3 args: $type, $buffer, $process
      */
-    public function runParallel(array $processes, $maxParallel, $poll = 1000, $callback = null))
+    public function runParallel(array $processes, $maxParallel, $poll = 1000, $callback = null)
     {
         $this->validateProcesses($processes);
 
